@@ -1,0 +1,51 @@
+name: Build Windows exe (amd64)
+
+on:
+  push:
+    paths:
+      - 'core/**'
+      - 'apps/windows/**'
+      - 'scripts/**'
+      - '.github/workflows/windows.yml'
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build amd64 exe
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.44.6'
+          channel: stable
+          cache: true
+
+      - name: Prepare Windows platform shell
+        shell: bash
+        run: bash scripts/prepare_windows.sh
+
+      - name: Build Windows release
+        shell: bash
+        run: |
+          cd apps/windows
+          flutter pub get
+          flutter build windows --release
+
+      - name: Copy sing-box to output
+        shell: bash
+        run: |
+          cp sing-box/sing-box.exe apps/windows/build/windows/x64/runner/Release/
+          cp sing-box/wintun.dll apps/windows/build/windows/x64/runner/Release/ || true
+          cp sing-box/libcronet.dll apps/windows/build/windows/x64/runner/Release/ || true
+          cp sing-box/*.srs apps/windows/build/windows/x64/runner/Release/ || true
+
+      - name: Upload Release folder
+        uses: actions/upload-artifact@v4
+        with:
+          name: nekobox-windows-amd64
+          path: apps/windows/build/windows/x64/runner/Release/
+          if-no-files-found: error

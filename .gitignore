@@ -1,0 +1,41 @@
+# Flutter/Dart
+.dart_tool/
+.packages
+build/
+pubspec.lock
+*.iml
+.idea/
+.flutter-plugins
+.flutter-plugins-dependencies
+
+# Android 平台壳生成物
+apps/android/android/.gradle/
+apps/android/android/local.properties
+apps/android/android/gradle/wrapper/gradle-wrapper.jar
+apps/android/android/app/.cxx/
+apps/android/android/app/build/
+
+# 原生构建产物
+*.apk
+*.aab
+*.exe
+*.o
+*.so
+*.dll
+!wintun.dll
+
+# sing-box 已解压二进制入库(压缩包不入库)
+!sing-box/libsingbox.so
+!sing-box/sing-box.exe
+!sing-box/libcronet.dll
+!apps/android/android/app/src/main/jniLibs/arm64-v8a/libsingbox.so
+sing-box/*.tar.gz
+sing-box/*.zip
+
+# OS
+.DS_Store
+Thumbs.db
+
+# 本地数据
+data/
+*.log

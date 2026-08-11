@@ -1,0 +1,41 @@
+name: Build Android APK (arm64)
+
+on:
+  push:
+    paths:
+      - 'core/**'
+      - 'apps/android/**'
+      - 'scripts/**'
+      - '.github/workflows/android.yml'
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build arm64 APK
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.44.6'
+          channel: stable
+          cache: true
+
+      - name: Prepare Android platform shell
+        run: bash scripts/prepare_android.sh
+
+      - name: Build APK (arm64 only)
+        run: |
+          cd apps/android
+          flutter pub get
+          flutter build apk --release --target-platform android-arm64
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: nekobox-android-arm64
+          path: apps/android/build/app/outputs/flutter-apk/*.apk
+          if-no-files-found: error
