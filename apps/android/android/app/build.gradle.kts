@@ -1,10 +1,17 @@
 plugins {
     id("com.android.application")
+    id("kotlin-android")
     id("dev.flutter.flutter-gradle-plugin")
 }
 
-// 说明: 本工程使用 Flutter Built-in Kotlin(Flutter 3.44+),
-// 不显式应用 kotlin-android 插件, 由 flutter-gradle-plugin 内置 Kotlin 支持。
+// Kotlin 2.2.20(显式声明,版本见 settings.gradle.kts);
+// mobile_scanner/file_picker 等新依赖要求 Kotlin 2.2+,Built-in Kotlin 2.0.0 不兼容
+
+kotlin {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
+    }
+}
 
 android {
     namespace = "io.nekobox.nekobox_android"
